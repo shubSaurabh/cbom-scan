@@ -1,0 +1,2 @@
+# Hardened SSH
+KexAlgorithms mlkem768x25519-sha256,curve25519-sha256,diffie-hellman-group14-sha1

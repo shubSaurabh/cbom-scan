@@ -1,0 +1,40 @@
+PQC readiness 0/100 (F)   7 files, 25 algorithms, 5 issues
+
+Broken (6)
+  3DES                         config/nginx.conf:4 (+2)
+  AES-ECB                      src/legacy.py:10
+  DH                           config/sshd_config:2
+  MD5                          src/legacy.py:6
+  RSA-1024                     src/legacy.py:8
+  SHA-1                        src/Crypto.java:6 (+2)
+Quantum-vulnerable (10)
+  EC-P-256                     src/legacy.py:9
+  ECDH                         config/nginx.conf:4
+  ECDH-P-256                   config/nginx.conf:5
+  ECDH-X25519                  config/nginx.conf:5 (+2)
+  ECDSA                        src/Crypto.java:7
+  ECDSA-P-384                  src/app.ts:7
+  RSA                          config/nginx.conf:4 (+2)
+  RSA-2048                     src/server.go:11
+  RSA-3072                     src/app.ts:3
+  RSA-4096                     src/tls.c:5
+Quantum-weakened (2)
+  AES-128-GCM                  config/nginx.conf:4
+  HMAC-SHA1                    config/nginx.conf:4
+OK (7)
+  AES                          src/legacy.py:10
+  AES-256-GCM                  src/app.ts:6
+  AES-GCM                      src/Crypto.java:5
+  ML-DSA-65                    src/tls.c:6
+  ML-KEM-768                   src/Crypto.java:8 (+1)
+  SHA-256                      src/Crypto.java:7 (+3)
+  X25519MLKEM768               config/nginx.conf:5 (+2)
+
+Issues
+  error   config/nginx.conf:3  Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3.
+  error   src/legacy.py:11  Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3.
+  error   src/legacy.py:12  TLS certificate verification is disabled, which allows man-in-the-middle attacks.
+  error   src/server.go:12  Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3.
+  error   src/server.go:12  TLS certificate verification is disabled, which allows man-in-the-middle attacks.
+
+Wrote examples/sample-cbom.json, examples/sample.sarif, examples/sample-report.md

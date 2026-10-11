@@ -1,0 +1,678 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cbom-scan",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/shubSaurabh/cbom-scan",
+          "rules": [
+            {
+              "id": "broken-algorithm",
+              "name": "broken-algorithm",
+              "shortDescription": {
+                "text": "Broken or deprecated cryptography"
+              },
+              "fullDescription": {
+                "text": "Replace this algorithm now; it is weak even without a quantum computer."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/shubSaurabh/cbom-scan"
+            },
+            {
+              "id": "quantum-vulnerable-algorithm",
+              "name": "quantum-vulnerable-algorithm",
+              "shortDescription": {
+                "text": "Quantum-vulnerable cryptography"
+              },
+              "fullDescription": {
+                "text": "Shor's algorithm breaks this. Add it to your PQC migration plan (ML-KEM, ML-DSA, hybrids)."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://github.com/shubSaurabh/cbom-scan"
+            },
+            {
+              "id": "quantum-weakened-algorithm",
+              "name": "quantum-weakened-algorithm",
+              "shortDescription": {
+                "text": "Quantum-weakened cryptography"
+              },
+              "fullDescription": {
+                "text": "Grover's algorithm halves its strength. Prefer 256-bit symmetric keys for long-lived data."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://github.com/shubSaurabh/cbom-scan"
+            },
+            {
+              "id": "tls-legacy-protocol",
+              "name": "tls-legacy-protocol",
+              "shortDescription": {
+                "text": "Tls legacy protocol"
+              },
+              "fullDescription": {
+                "text": "Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/shubSaurabh/cbom-scan"
+            },
+            {
+              "id": "tls-verification-disabled",
+              "name": "tls-verification-disabled",
+              "shortDescription": {
+                "text": "Tls verification disabled"
+              },
+              "fullDescription": {
+                "text": "TLS certificate verification is disabled, which allows man-in-the-middle attacks."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/shubSaurabh/cbom-scan"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDH (quantum-vulnerable). Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-weakened-algorithm",
+          "level": "note",
+          "message": {
+            "text": "AES-128-GCM (quantum-weakened). Use AES-256 in GCM mode for long-lived data (CNSA 2.0)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "3DES (broken). 3DES is deprecated (NIST, 2023); use AES-256-GCM"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "3DES (broken). 3DES is deprecated (NIST, 2023); use AES-256-GCM"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Crypto.java"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "3DES (broken). 3DES is deprecated (NIST, 2023); use AES-256-GCM"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/tls.c"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-weakened-algorithm",
+          "level": "note",
+          "message": {
+            "text": "HMAC-SHA1 (quantum-weakened). Use HMAC-SHA256 or stronger."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDH-X25519 (quantum-vulnerable). Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDH-X25519 (quantum-vulnerable). Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/sshd_config"
+                },
+                "region": {
+                  "startLine": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDH-X25519 (quantum-vulnerable). Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDH-P-256 (quantum-vulnerable). Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "DH (broken). diffie-hellman-group14-sha1 uses a small group or SHA-1"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/sshd_config"
+                },
+                "region": {
+                  "startLine": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "SHA-1 (broken). SHA-1 is collision-broken (SHAttered, 2017); use SHA-256 or better"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Crypto.java"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "SHA-1 (broken). SHA-1 is collision-broken (SHAttered, 2017); use SHA-256 or better"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/app.ts"
+                },
+                "region": {
+                  "startLine": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "SHA-1 (broken). SHA-1 is collision-broken (SHAttered, 2017); use SHA-256 or better"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDSA (quantum-vulnerable). Plan migration to ML-DSA (FIPS 204), or hybrid ECDSA+ML-DSA certificates where supported."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Crypto.java"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA-3072 (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/app.ts"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "ECDSA-P-384 (quantum-vulnerable). Plan migration to ML-DSA (FIPS 204), or hybrid ECDSA+ML-DSA certificates where supported."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/app.ts"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "MD5 (broken). MD5 is collision-broken; use SHA-256 or better"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "RSA-1024 (broken). RSA-1024 is below the 2048-bit minimum (NIST SP 800-131A)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 8
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "EC-P-256 (quantum-vulnerable). Elliptic-curve keys are quantum-vulnerable; plan migration to ML-KEM / ML-DSA."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 9
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "broken-algorithm",
+          "level": "error",
+          "message": {
+            "text": "AES-ECB (broken). ECB mode leaks plaintext patterns; use GCM"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA-2048 (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 11
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "quantum-vulnerable-algorithm",
+          "level": "warning",
+          "message": {
+            "text": "RSA-4096 (quantum-vulnerable). Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/tls.c"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tls-legacy-protocol",
+          "level": "error",
+          "message": {
+            "text": "Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "config/nginx.conf"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tls-legacy-protocol",
+          "level": "error",
+          "message": {
+            "text": "Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 11
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tls-verification-disabled",
+          "level": "error",
+          "message": {
+            "text": "TLS certificate verification is disabled, which allows man-in-the-middle attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/legacy.py"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tls-legacy-protocol",
+          "level": "error",
+          "message": {
+            "text": "Legacy SSL/TLS protocol enabled (SSLv3, TLS 1.0 or 1.1). Require TLS 1.2+, ideally TLS 1.3."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tls-verification-disabled",
+          "level": "error",
+          "message": {
+            "text": "TLS certificate verification is disabled, which allows man-in-the-middle attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/server.go"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

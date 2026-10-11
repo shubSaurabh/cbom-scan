@@ -1,0 +1,49 @@
+name: cbom-scan
+description: Cryptography inventory (CycloneDX CBOM), SARIF findings and a post-quantum readiness score
+branding:
+  icon: shield
+  color: blue
+inputs:
+  path:
+    description: Directory to scan
+    default: "."
+  tls:
+    description: Space-separated TLS endpoints to probe (host or host:port)
+    default: ""
+  fail-under:
+    description: Fail if the readiness score is below this value (0 disables)
+    default: "0"
+  exclude:
+    description: Space-separated globs to skip
+    default: ""
+outputs:
+  score:
+    description: PQC readiness score (0-100)
+    value: ${{ steps.scan.outputs.score }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - shell: bash
+      run: pip install --quiet "${{ github.action_path }}"
+    - id: scan
+      shell: bash
+      env:
+        SCAN_PATH: ${{ inputs.path }}
+        SCAN_TLS: ${{ inputs.tls }}
+        SCAN_EXCLUDE: ${{ inputs.exclude }}
+        FAIL_UNDER: ${{ inputs.fail-under }}
+      run: |
+        args=("$SCAN_PATH" --cbom cbom.json --sarif cbom.sarif --markdown cbom-report.md --no-color)
+        for t in $SCAN_TLS; do args+=(--tls "$t"); done
+        for e in $SCAN_EXCLUDE; do args+=(--exclude "$e"); done
+        set +e
+        cbom-scan "${args[@]}" --fail-under "$FAIL_UNDER"
+        code=$?
+        set -e
+        score=$(python -c "import json;print(next(p['value'] for p in json.load(open('cbom.json'))['metadata']['properties'] if p['name'].endswith('score')))")
+        echo "score=$score" >> "$GITHUB_OUTPUT"
+        cat cbom-report.md >> "$GITHUB_STEP_SUMMARY"
+        exit $code

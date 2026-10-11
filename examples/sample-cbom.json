@@ -1,0 +1,972 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:4a7e0c27-d370-44c3-9d2b-55366cf2ed1a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-11T07:35:50Z",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "cbom-scan",
+          "version": "0.1.0",
+          "externalReferences": [
+            {
+              "type": "website",
+              "url": "https://github.com/shubSaurabh/cbom-scan"
+            }
+          ]
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "target",
+      "name": "sample-app"
+    },
+    "properties": [
+      {
+        "name": "cbom-scan:pqc-readiness-score",
+        "value": "0"
+      },
+      {
+        "name": "cbom-scan:pqc-readiness-grade",
+        "value": "F"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/3des",
+      "name": "3DES",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "cryptoFunctions": [
+            "encrypt"
+          ],
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 4,
+            "additionalContext": "ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:DES-CBC3-SHA:!aNULL;"
+          },
+          {
+            "location": "src/Crypto.java",
+            "line": 4,
+            "additionalContext": "Cipher c = Cipher.getInstance(\"DESede/CBC/PKCS5Padding\");"
+          },
+          {
+            "location": "src/tls.c",
+            "line": 3,
+            "additionalContext": "const EVP_CIPHER *c = EVP_des_ede3_cbc();"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "3DES is deprecated (NIST, 2023); use AES-256-GCM"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/aes",
+      "name": "AES",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "cryptoFunctions": [
+            "encrypt"
+          ]
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/legacy.py",
+            "line": 10,
+            "additionalContext": "cipher = Cipher(algorithms.AES(k), modes.ECB())"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/aes-128-gcm",
+      "name": "AES-128-GCM",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "ae",
+          "parameterSetIdentifier": "128",
+          "mode": "gcm",
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 1
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 4,
+            "additionalContext": "ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:DES-CBC3-SHA:!aNULL;"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-weakened"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Use AES-256 in GCM mode for long-lived data (CNSA 2.0)."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/aes-256-gcm",
+      "name": "AES-256-GCM",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "ae",
+          "parameterSetIdentifier": "256",
+          "mode": "gcm",
+          "classicalSecurityLevel": 256,
+          "nistQuantumSecurityLevel": 5
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/app.ts",
+            "line": 6,
+            "additionalContext": "const c = createCipheriv(\"aes-256-gcm\", key, iv);"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/aes-ecb",
+      "name": "AES-ECB",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "mode": "ecb",
+          "cryptoFunctions": [
+            "encrypt"
+          ]
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/legacy.py",
+            "line": 10,
+            "additionalContext": "cipher = Cipher(algorithms.AES(k), modes.ECB())"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "ECB mode leaks plaintext patterns; use GCM"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/aes-gcm",
+      "name": "AES-GCM",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "ae",
+          "mode": "gcm"
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/Crypto.java",
+            "line": 5,
+            "additionalContext": "Cipher g = Cipher.getInstance(\"AES/GCM/NoPadding\");"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/dh",
+      "name": "DH",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/sshd_config",
+            "line": 2,
+            "additionalContext": "KexAlgorithms mlkem768x25519-sha256,curve25519-sha256,diffie-hellman-group14-sha1"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "diffie-hellman-group14-sha1 uses a small group or SHA-1"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ec-p-256",
+      "name": "EC-P-256",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "other",
+          "curve": "P-256",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.10045.3.1.7"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/legacy.py",
+            "line": 9,
+            "additionalContext": "signer = ec.generate_private_key(ec.SECP256R1())"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Elliptic-curve keys are quantum-vulnerable; plan migration to ML-KEM / ML-DSA."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ecdh",
+      "name": "ECDH",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 4,
+            "additionalContext": "ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:DES-CBC3-SHA:!aNULL;"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ecdh-p-256",
+      "name": "ECDH-P-256",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "curve": "P-256",
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.10045.3.1.7"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 5,
+            "additionalContext": "ssl_ecdh_curve X25519MLKEM768:X25519:prime256v1;"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ecdh-x25519",
+      "name": "ECDH-X25519",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "curve": "X25519",
+          "cryptoFunctions": [
+            "keyderive"
+          ],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 5,
+            "additionalContext": "ssl_ecdh_curve X25519MLKEM768:X25519:prime256v1;"
+          },
+          {
+            "location": "config/sshd_config",
+            "line": 2,
+            "additionalContext": "KexAlgorithms mlkem768x25519-sha256,curve25519-sha256,diffie-hellman-group14-sha1"
+          },
+          {
+            "location": "src/server.go",
+            "line": 13,
+            "additionalContext": "CurvePreferences: []tls.CurveID{tls.X25519MLKEM768, tls.X25519}}"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Move to hybrid key exchange X25519MLKEM768 (TLS 1.3, OpenSSL 3.5+, Go 1.24+, Chrome, Cloudflare)."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ecdsa",
+      "name": "ECDSA",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/Crypto.java",
+            "line": 7,
+            "additionalContext": "Signature s = Signature.getInstance(\"SHA256withECDSA\");"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-DSA (FIPS 204), or hybrid ECDSA+ML-DSA certificates where supported."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ecdsa-p-384",
+      "name": "ECDSA-P-384",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "curve": "P-384",
+          "classicalSecurityLevel": 192,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.3.132.0.34"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/app.ts",
+            "line": 7,
+            "additionalContext": "const k = await crypto.subtle.generateKey({ name: \"ECDSA\", namedCurve: \"P-384\" }, true, [\"sign\"]);"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-DSA (FIPS 204), or hybrid ECDSA+ML-DSA certificates where supported."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/hmac-sha1",
+      "name": "HMAC-SHA1",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "mac",
+          "parameterSetIdentifier": "HMAC-SHA1",
+          "nistQuantumSecurityLevel": 1
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 4,
+            "additionalContext": "ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:DES-CBC3-SHA:!aNULL;"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-weakened"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Use HMAC-SHA256 or stronger."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/md5",
+      "name": "MD5",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "cryptoFunctions": [
+            "digest"
+          ],
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/legacy.py",
+            "line": 6,
+            "additionalContext": "return hashlib.md5(data).hexdigest()  # legacy cache key"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "MD5 is collision-broken; use SHA-256 or better"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ml-dsa-65",
+      "name": "ML-DSA-65",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "parameterSetIdentifier": "ML-DSA-65",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "nistQuantumSecurityLevel": 3
+        },
+        "oid": "2.16.840.1.101.3.4.3.18"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/tls.c",
+            "line": 6,
+            "additionalContext": "EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_from_name(NULL, \"ML-DSA-65\", NULL);"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/ml-kem-768",
+      "name": "ML-KEM-768",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "kem",
+          "parameterSetIdentifier": "ML-KEM-768",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "nistQuantumSecurityLevel": 3
+        },
+        "oid": "2.16.840.1.101.3.4.4.2"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/Crypto.java",
+            "line": 8,
+            "additionalContext": "KeyPairGenerator kpg = KeyPairGenerator.getInstance(\"ML-KEM-768\");"
+          },
+          {
+            "location": "src/server.go",
+            "line": 14,
+            "additionalContext": "dk, _ := mlkem.GenerateKey768()"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/rsa",
+      "name": "RSA",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "cryptoFunctions": [
+            "sign"
+          ],
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 4,
+            "additionalContext": "ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:DES-CBC3-SHA:!aNULL;"
+          },
+          {
+            "location": "src/legacy.py",
+            "line": 13,
+            "additionalContext": "token = jwt.encode(claims, priv, algorithm=\"RS256\")"
+          },
+          {
+            "location": "src/server.go",
+            "line": 4,
+            "additionalContext": "\"crypto/rsa\""
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/rsa-1024",
+      "name": "RSA-1024",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "pke",
+          "parameterSetIdentifier": "1024",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "classicalSecurityLevel": 80,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/legacy.py",
+            "line": 8,
+            "additionalContext": "key = rsa.generate_private_key(public_exponent=65537, key_size=1024)"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "RSA-1024 is below the 2048-bit minimum (NIST SP 800-131A)"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/rsa-2048",
+      "name": "RSA-2048",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "pke",
+          "parameterSetIdentifier": "2048",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "classicalSecurityLevel": 112,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/server.go",
+            "line": 11,
+            "additionalContext": "k, _ := rsa.GenerateKey(rand.Reader, 2048)"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/rsa-3072",
+      "name": "RSA-3072",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "pke",
+          "parameterSetIdentifier": "3072",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/app.ts",
+            "line": 3,
+            "additionalContext": "const { publicKey } = generateKeyPairSync(\"rsa\", {"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/rsa-4096",
+      "name": "RSA-4096",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "pke",
+          "parameterSetIdentifier": "4096",
+          "cryptoFunctions": [
+            "keygen"
+          ],
+          "classicalSecurityLevel": 140,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/tls.c",
+            "line": 5,
+            "additionalContext": "RSA_generate_key_ex(rsa, 4096, e, NULL);"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-vulnerable"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "Plan migration to ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures; use hybrids (e.g. X25519MLKEM768) during transition."
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/sha-1",
+      "name": "SHA-1",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "nistQuantumSecurityLevel": 0
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/Crypto.java",
+            "line": 6,
+            "additionalContext": "MessageDigest md = MessageDigest.getInstance(\"SHA-1\");"
+          },
+          {
+            "location": "src/app.ts",
+            "line": 2,
+            "additionalContext": "const h = createHash(\"sha1\").update(x).digest(\"hex\");"
+          },
+          {
+            "location": "src/server.go",
+            "line": 5,
+            "additionalContext": "\"crypto/sha1\""
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "broken"
+        },
+        {
+          "name": "cbom-scan:recommendation",
+          "value": "SHA-1 is collision-broken (SHAttered, 2017); use SHA-256 or better"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/sha-256",
+      "name": "SHA-256",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "cryptoFunctions": [
+            "digest",
+            "sign"
+          ],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 2
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "src/Crypto.java",
+            "line": 7,
+            "additionalContext": "Signature s = Signature.getInstance(\"SHA256withECDSA\");"
+          },
+          {
+            "location": "src/legacy.py",
+            "line": 13,
+            "additionalContext": "token = jwt.encode(claims, priv, algorithm=\"RS256\")"
+          },
+          {
+            "location": "src/legacy.py",
+            "line": 14,
+            "additionalContext": "digest = hashlib.sha256(b\"ok\").digest()"
+          },
+          {
+            "location": "src/tls.c",
+            "line": 4,
+            "additionalContext": "const EVP_MD *m = EVP_sha256();"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto/algorithm/x25519mlkem768",
+      "name": "X25519MLKEM768",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "kem",
+          "parameterSetIdentifier": "X25519MLKEM768",
+          "cryptoFunctions": [
+            "keyderive"
+          ],
+          "nistQuantumSecurityLevel": 3
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "config/nginx.conf",
+            "line": 5,
+            "additionalContext": "ssl_ecdh_curve X25519MLKEM768:X25519:prime256v1;"
+          },
+          {
+            "location": "config/sshd_config",
+            "line": 2,
+            "additionalContext": "KexAlgorithms mlkem768x25519-sha256,curve25519-sha256,diffie-hellman-group14-sha1"
+          },
+          {
+            "location": "src/server.go",
+            "line": 13,
+            "additionalContext": "CurvePreferences: []tls.CurveID{tls.X25519MLKEM768, tls.X25519}}"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "cbom-scan:status",
+          "value": "quantum-safe"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "target",
+      "dependsOn": [
+        "crypto/algorithm/3des",
+        "crypto/algorithm/aes",
+        "crypto/algorithm/aes-128-gcm",
+        "crypto/algorithm/aes-256-gcm",
+        "crypto/algorithm/aes-ecb",
+        "crypto/algorithm/aes-gcm",
+        "crypto/algorithm/dh",
+        "crypto/algorithm/ec-p-256",
+        "crypto/algorithm/ecdh",
+        "crypto/algorithm/ecdh-p-256",
+        "crypto/algorithm/ecdh-x25519",
+        "crypto/algorithm/ecdsa",
+        "crypto/algorithm/ecdsa-p-384",
+        "crypto/algorithm/hmac-sha1",
+        "crypto/algorithm/md5",
+        "crypto/algorithm/ml-dsa-65",
+        "crypto/algorithm/ml-kem-768",
+        "crypto/algorithm/rsa",
+        "crypto/algorithm/rsa-1024",
+        "crypto/algorithm/rsa-2048",
+        "crypto/algorithm/rsa-3072",
+        "crypto/algorithm/rsa-4096",
+        "crypto/algorithm/sha-1",
+        "crypto/algorithm/sha-256",
+        "crypto/algorithm/x25519mlkem768"
+      ]
+    }
+  ]
+}
