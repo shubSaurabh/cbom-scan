@@ -105,7 +105,7 @@ jobs:
   cbom:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: shubSaurabh/cbom-scan@main
         with:
           path: .
@@ -113,7 +113,7 @@ jobs:
       - uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: cbom.sarif
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: cbom
           path: |
